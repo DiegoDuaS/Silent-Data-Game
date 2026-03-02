@@ -1,0 +1,71 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\diego\\OneDrive\\Escritorio\\2026\\PrograVideojuegos\\Silent Data\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{EBC48298-8531-72E4-C642-FC6AED0D9FF5}|Assembly-CSharp.csproj|C:\\Users\\diego\\OneDrive\\Escritorio\\2026\\PrograVideojuegos\\Silent Data\\assets\\scripts\\armedguardbehaviour.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EBC48298-8531-72E4-C642-FC6AED0D9FF5}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\armedguardbehaviour.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EBC48298-8531-72E4-C642-FC6AED0D9FF5}|Assembly-CSharp.csproj|c:\\users\\diego\\onedrive\\escritorio\\2026\\progravideojuegos\\silent data\\assets\\scripts\\guardbehaviour.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EBC48298-8531-72E4-C642-FC6AED0D9FF5}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\guardbehaviour.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EBC48298-8531-72E4-C642-FC6AED0D9FF5}|Assembly-CSharp.csproj|c:\\users\\diego\\onedrive\\escritorio\\2026\\progravideojuegos\\silent data\\assets\\scripts\\dronescoutebehaviour.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EBC48298-8531-72E4-C642-FC6AED0D9FF5}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\dronescoutebehaviour.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "DroneScouteBehaviour.cs",
+              "DocumentMoniker": "C:\\Users\\diego\\OneDrive\\Escritorio\\2026\\PrograVideojuegos\\Silent Data\\Assets\\Scripts\\DroneScouteBehaviour.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\DroneScouteBehaviour.cs",
+              "ToolTip": "C:\\Users\\diego\\OneDrive\\Escritorio\\2026\\PrograVideojuegos\\Silent Data\\Assets\\Scripts\\DroneScouteBehaviour.cs",
+              "RelativeToolTip": "Assets\\Scripts\\DroneScouteBehaviour.cs",
+              "ViewState": "AQIAAHsAAAAAAAAAAAAgwKwAAAABAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-01T23:45:50.592Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "GuardBehaviour.cs",
+              "DocumentMoniker": "C:\\Users\\diego\\OneDrive\\Escritorio\\2026\\PrograVideojuegos\\Silent Data\\Assets\\Scripts\\GuardBehaviour.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\GuardBehaviour.cs",
+              "ToolTip": "C:\\Users\\diego\\OneDrive\\Escritorio\\2026\\PrograVideojuegos\\Silent Data\\Assets\\Scripts\\GuardBehaviour.cs",
+              "RelativeToolTip": "Assets\\Scripts\\GuardBehaviour.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAsAAAAvAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-01T21:29:01.421Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "ArmedGuardBehaviour.cs",
+              "DocumentMoniker": "C:\\Users\\diego\\OneDrive\\Escritorio\\2026\\PrograVideojuegos\\Silent Data\\Assets\\Scripts\\ArmedGuardBehaviour.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\ArmedGuardBehaviour.cs",
+              "ToolTip": "C:\\Users\\diego\\OneDrive\\Escritorio\\2026\\PrograVideojuegos\\Silent Data\\Assets\\Scripts\\ArmedGuardBehaviour.cs",
+              "RelativeToolTip": "Assets\\Scripts\\ArmedGuardBehaviour.cs",
+              "ViewState": "AQIAABABAAAAAAAAAAAqwB8BAAABAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-22T23:32:09.305Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
