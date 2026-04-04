@@ -8,6 +8,7 @@ public class LevelManager : MonoBehaviour
     [SerializeField] private int documentosObjetivo = 3;
     private int documentosRecogidos = 0;
     private int nivelSeguridadActual = 0;
+    private bool tieneTelefono = false;
 
     [Header("Sistema de Salud")]
     public int saludMaxima = 100;
@@ -67,4 +68,8 @@ public class LevelManager : MonoBehaviour
         if (sfxVictoria != null) AudioManager.Instance.PlaySFX(sfxVictoria);
         if (puertaSalida != null) puertaSalida.SetActive(false);
     }
+
+    public int GetSecurityLevel() => nivelSeguridadActual;
+    public int GetFilesCollected() => documentosRecogidos;
+    public bool HasPhone() => tieneTelefono;
 }
