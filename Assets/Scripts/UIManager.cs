@@ -1,61 +1,80 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections.Generic;
 
 public class UIManager : MonoBehaviour
 {
-    [Header("HUD")]
-    public Slider barraVidaSlider;
-    public TextMeshProUGUI counterFilesTexto;
-    public TextMeshProUGUI keyCardLevelTexto;
-    public TextMeshProUGUI hackingStatusTexto; 
+    [Header("HUD Elements")]
+    public Slider healthBarSlider;
+    public TextMeshProUGUI filesCounterText;
+    public TextMeshProUGUI keyCardLevelText;
+    public TextMeshProUGUI hackingStatusText;
 
-    [Header("Inventario")]
-    public Transform panelInventario;
+    [Header("Inventory Settings")]
+    public Transform inventoryPanel;
     public GameObject itemPrefab;
+
+    [Header("Database")]
+    [SerializeField] private List<PickupData> itemCatalog;
 
     private void OnEnable()
     {
-        EventManager.OnHealthChanged += ActualizarBarraVida;
-        EventManager.OnFileCollected += ActualizarContadorFiles;
-        EventManager.OnSecurityLevelChanged += ActualizarTextoKeycard;
-        EventManager.OnPhoneCollected += ActivarHUDHackeo;
-        Pickup.OnPickupCollected += IntentarAñadirAInventario;
+        EventManager.OnHealthChanged += UpdateHealthBar;
+        EventManager.OnFileCollected += UpdateFilesCounter;
+        EventManager.OnSecurityLevelChanged += UpdateKeyCardText;
+        EventManager.OnPhoneCollected += HandlePhoneInventoryUI;
+        Pickup.OnPickupCollected += HandlePhysicalPickup;
     }
 
     private void OnDisable()
     {
-        EventManager.OnHealthChanged -= ActualizarBarraVida;
-        EventManager.OnFileCollected -= ActualizarContadorFiles;
-        EventManager.OnSecurityLevelChanged -= ActualizarTextoKeycard;
-        EventManager.OnPhoneCollected -= ActivarHUDHackeo;
-        Pickup.OnPickupCollected -= IntentarAñadirAInventario;
+        EventManager.OnHealthChanged -= UpdateHealthBar;
+        EventManager.OnFileCollected -= UpdateFilesCounter;
+        EventManager.OnSecurityLevelChanged -= UpdateKeyCardText;
+        EventManager.OnPhoneCollected -= HandlePhoneInventoryUI;
+        Pickup.OnPickupCollected -= HandlePhysicalPickup;
     }
 
-    private void ActualizarBarraVida(int salud) => barraVidaSlider.value = salud;
+    private void UpdateHealthBar(int health) { if (healthBarSlider != null) healthBarSlider.value = health; }
+    private void UpdateFilesCounter(int total) { if (filesCounterText != null) filesCounterText.text = "Files Found: " + total; }
+    private void UpdateKeyCardText(int level) { if (keyCardLevelText != null) keyCardLevelText.text = "Key Card Level: " + level; }
 
-    private void ActualizarContadorFiles(int total) => counterFilesTexto.text = "Files Found: " + total;
-
-    private void ActualizarTextoKeycard(int nivel) => keyCardLevelTexto.text = "Key Card Level: " + nivel;
-
-    private void ActivarHUDHackeo()
+    private void HandlePhysicalPickup(Pickup pickup)
     {
-        if (hackingStatusTexto != null)
+        if (!(pickup is Phone) && !(pickup is ClassifiedDocs) && !(pickup is Keycard) && !(pickup is Medkit) && !(pickup is USB))
         {
-            hackingStatusTexto.gameObject.SetActive(true);
+            CreateInventoryIcon(pickup.Data);
         }
     }
 
-    private void IntentarAñadirAInventario(Pickup pickup)
+    private void HandlePhoneInventoryUI()
     {
-  
-        if (!(pickup is ClassifiedDocs) && !(pickup is Keycard))
-        {
-            GameObject nuevoItem = Instantiate(itemPrefab, panelInventario);
-            Image imagen = nuevoItem.GetComponentInChildren<Image>();
+        if (hackingStatusText != null) hackingStatusText.gameObject.SetActive(true);
+        PickupData phoneData = itemCatalog.Find(d => d.itemName == "Celphone");
 
-            if (imagen != null)
-                imagen.sprite = pickup.Data.icon;
+        if (phoneData != null)
+        {
+            CreateInventoryIcon(phoneData);
+        }
+        else
+        {
+            Debug.LogWarning("[UIManager]: Could not find 'Celphone' in the Item Catalog!");
+        }
+    }
+
+    private void CreateInventoryIcon(PickupData data)
+    {
+        string uiName = data.itemName + "_UI_Icon";
+        if (inventoryPanel.Find(uiName) != null) return;
+
+        GameObject newItem = Instantiate(itemPrefab, inventoryPanel);
+        newItem.name = uiName;
+
+        Image img = newItem.GetComponentInChildren<Image>();
+        if (img != null)
+        {
+            img.sprite = data.icon;
         }
     }
 }

@@ -49,6 +49,16 @@ public class ArmedGuardBehaviour : MonoBehaviour
         if (exclamationMarkUI) exclamationMarkUI.SetActive(false);
     }
 
+    private void OnEnable()
+    {
+        EventManager.OnEnemyHit += HandleHit;
+    }
+
+    private void OnDisable()
+    {
+        EventManager.OnEnemyHit -= HandleHit;
+    }
+
     void Update()
     {
         anim.SetFloat("Speed", agent.velocity.magnitude);
@@ -284,5 +294,39 @@ public class ArmedGuardBehaviour : MonoBehaviour
             isInvestigating = false;
             StartCoroutine(SuspiciousSequence());
         }
+    }
+
+    private void HandleHit(GameObject hitTarget)
+    {
+        if (hitTarget == gameObject)
+        {
+            Die();
+        }
+    }
+
+    public void Die()
+    {
+        StopAllCoroutines();
+        currentState = GuardState.Guarding;
+
+        agent.isStopped = true;
+        agent.velocity = Vector3.zero;
+
+        anim.SetBool("isShot", true);
+
+        if (exclamationMarkUI) exclamationMarkUI.SetActive(false);
+        if (questionMarkUI) questionMarkUI.SetActive(false);
+
+        // 1. IMPORTANTE: Cambiamos el tag del padre INMEDIATAMENTE
+        // Esto asegura que si el usuario guarda en esos 3 segundos, el PersistenceManager lo ignore.
+        transform.root.gameObject.tag = "Untagged";
+
+        this.enabled = false;
+        agent.enabled = false;
+
+        Debug.Log(gameObject.name + " and its root have been eliminated.");
+
+        // 2. Destruimos el objeto raíz (el prefab completo) tras el delay
+        Destroy(transform.root.gameObject, 3f);
     }
 }

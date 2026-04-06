@@ -11,6 +11,7 @@ public class PlayerData
     public int securityLevel;
     public int filesCollected;
     public bool hasPhone;
+    public List<string> inventoryItems = new List<string>();
 }
 
 [Serializable]
@@ -60,15 +61,15 @@ public class PersistenceManager : MonoBehaviour
 
     public void SaveSessionData()
     {
- 
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         if (player != null)
         {
             session.playerData.position = player.transform.position;
-            session.playerData.currentHealth = LevelManager.Instance.saludActual;
+            session.playerData.currentHealth = LevelManager.Instance.currentHealth;
             session.playerData.securityLevel = LevelManager.Instance.GetSecurityLevel();
             session.playerData.filesCollected = LevelManager.Instance.GetFilesCollected();
             session.playerData.hasPhone = LevelManager.Instance.HasPhone();
+            session.playerData.inventoryItems = LevelManager.Instance.GetInventory();
         }
 
         session.worldData.activeItemsNames.Clear();
@@ -83,34 +84,64 @@ public class PersistenceManager : MonoBehaviour
         {
             session.worldData.activeEnemiesNames.Add(enemy.name);
         }
-        string json = JsonUtility.ToJson(session, true);
 
+        string json = JsonUtility.ToJson(session, true);
         File.WriteAllText(path, json);
         Debug.Log("<color=green>PARTIDA GUARDADA EN: </color>" + path);
     }
 
     public void LoadSessionData()
     {
-        if (!File.Exists(path))
-        {
-            Debug.LogWarning("No se encontró ningún archivo de guardado en la ruta especificada.");
-            return;
-        }
+        if (!File.Exists(path)) return;
 
         string json = File.ReadAllText(path);
-
         session = JsonUtility.FromJson<SessionData>(json);
 
+ 
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         if (player != null)
         {
+            CharacterController cc = player.GetComponent<CharacterController>();
+            if (cc != null) cc.enabled = false;
+
             player.transform.position = session.playerData.position;
+            if (cc != null) cc.enabled = true;
+
+            Debug.Log("<color=yellow>Player moved to saved position: </color>" + session.playerData.position);
         }
 
-        LevelManager.Instance.saludActual = session.playerData.currentHealth;
+
+        LevelManager.Instance.currentHealth = session.playerData.currentHealth;
+        LevelManager.Instance.SetSecurityLevel(session.playerData.securityLevel);
+        LevelManager.Instance.SetFilesCollected(session.playerData.filesCollected);
+        LevelManager.Instance.SetInventory(session.playerData.inventoryItems);
+
         EventManager.TriggerHealthChanged(session.playerData.currentHealth);
         EventManager.TriggerSecurityLevelChanged(session.playerData.securityLevel);
+        EventManager.TriggerFileCollected(session.playerData.filesCollected);
 
-        Debug.Log("<color=cyan>PARTIDA CARGADA EXITOSAMENTE.</color>");
+        CleanWorld();
+        Debug.Log("<color=cyan>PARTIDA CARGADA Y SINCRONIZADA CON LEVELMANAGER.</color>");
+    }
+
+    private void CleanWorld()
+    {
+        GameObject[] todosLosItems = GameObject.FindGameObjectsWithTag("Collectible");
+        foreach (GameObject item in todosLosItems)
+        {
+            if (!session.worldData.activeItemsNames.Contains(item.name))
+            {
+                Destroy(item);
+            }
+        }
+
+        GameObject[] todosLosEnemigos = GameObject.FindGameObjectsWithTag("Enemy");
+        foreach (GameObject enemy in todosLosEnemigos)
+        {
+            if (!session.worldData.activeEnemiesNames.Contains(enemy.name))
+            {
+                Destroy(enemy);
+            }
+        }
     }
 }

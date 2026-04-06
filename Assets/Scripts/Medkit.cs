@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Medikit : Pickup
+public class Medkit : Pickup
 {
     [SerializeField] private int saludRecuperada = 25;
 
@@ -8,7 +8,7 @@ public class Medikit : Pickup
     {
         if (LevelManager.Instance != null)
         {
-            LevelManager.Instance.ModificarSalud(saludRecuperada);
+            LevelManager.Instance.ModifyHealth(saludRecuperada);
         }
     }
 }
