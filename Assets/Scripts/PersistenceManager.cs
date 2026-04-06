@@ -87,7 +87,7 @@ public class PersistenceManager : MonoBehaviour
 
         string json = JsonUtility.ToJson(session, true);
         File.WriteAllText(path, json);
-        Debug.Log("<color=green>PARTIDA GUARDADA EN: </color>" + path);
+        Debug.Log("<color=green>Sesion saved in: </color>" + path);
     }
 
     public void LoadSessionData()
@@ -121,7 +121,7 @@ public class PersistenceManager : MonoBehaviour
         EventManager.TriggerFileCollected(session.playerData.filesCollected);
 
         CleanWorld();
-        Debug.Log("<color=cyan>PARTIDA CARGADA Y SINCRONIZADA CON LEVELMANAGER.</color>");
+        Debug.Log("<color=cyan>Sesion Loaded.</color>");
     }
 
     private void CleanWorld()

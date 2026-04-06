@@ -58,26 +58,20 @@ public class LevelManager : MonoBehaviour
 
     public void AddToInventory(string itemName)
     {
-        // Log to see what item is being processed
-        Debug.Log($"<color=cyan>[LevelManager]: Attempting to add item: {itemName}</color>");
+
 
         if (!playerInventory.Contains(itemName))
         {
             playerInventory.Add(itemName);
-            Debug.Log($"<color=green>[LevelManager]: {itemName} successfully added to Inventory list.</color>");
 
-            // Make sure this matches your JSON "Celphone" exactly
+    
             if (itemName == "Celphone")
             {
                 hasPhone = true;
                 EventManager.TriggerPhoneCollected();
-                Debug.Log("<color=yellow>[LevelManager]: Phone logic activated and Event triggered.</color>");
             }
         }
-        else
-        {
-            Debug.Log($"<color=white>[LevelManager]: {itemName} is already in the inventory, ignoring.</color>");
-        }
+        
     }
 
     public List<string> GetInventory() => playerInventory;

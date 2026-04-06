@@ -25,25 +25,14 @@ public class PlayerShootAbility : MonoBehaviour
 
     private void Shoot()
     {
-        // 1. Rayo desde el centro de la cámara
         Ray ray = mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
         RaycastHit hit;
 
-        // Usamos el origen y dirección por separado para evitar errores de sobrecarga
         if (Physics.Raycast(ray.origin, ray.direction, out hit, shootRange, enemyLayer))
         {
-            // Si el Gizmo se pone verde, esto DEBE ejecutarse ahora
-           
-                EventManager.TriggerEnemyHit(hit.collider.gameObject);
-                Debug.Log("<color=red>Target Hit: </color>" + hit.collider.name);
-           
+                EventManager.TriggerEnemyHit(hit.collider.gameObject);   
         }
-        else
-        {
-            Debug.Log("<color=orange>No enemy in sight.</color>");
-        }
-
-        Debug.Log("Bang! Shot fired.");
+        
     }
 
     // --- GIZMOS ---
@@ -56,8 +45,7 @@ public class PlayerShootAbility : MonoBehaviour
         Ray ray = mainCamera.ViewportPointToRay(centerPoint);
         RaycastHit hit;
 
-        // 1. SHOOT LINE GIZMO
-        // Changes color to green if an enemy is within range/aim
+
         if (Physics.Raycast(ray, out hit, shootRange, enemyLayer))
         {
             Gizmos.color = Color.green;
@@ -70,15 +58,12 @@ public class PlayerShootAbility : MonoBehaviour
             Gizmos.DrawRay(ray.origin, ray.direction * shootRange);
         }
 
-        // 2. RANGE AREA GIZMO
-        // Draws a sphere around the player to show the total 360° reach
-        Gizmos.color = new Color(1, 0, 0, 0.2f); // Transparent red
+        Gizmos.color = new Color(1, 0, 0, 0.2f); 
         Gizmos.DrawWireSphere(transform.position, shootRange);
     }
 
     public void EquipGun()
     {
         hasGun = true;
-        Debug.Log("<color=yellow>[SYSTEM]: Pistol equipped.</color>");
     }
 }

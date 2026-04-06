@@ -57,10 +57,6 @@ public class UIManager : MonoBehaviour
         {
             CreateInventoryIcon(phoneData);
         }
-        else
-        {
-            Debug.LogWarning("[UIManager]: Could not find 'Celphone' in the Item Catalog!");
-        }
     }
 
     private void CreateInventoryIcon(PickupData data)
