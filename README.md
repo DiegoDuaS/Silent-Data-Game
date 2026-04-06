@@ -55,3 +55,50 @@ Video de Arquitectura y Gameplay:
 
 [![Mira el video aquí](https://img.youtube.com/vi/0Sxx0rLU_Bw/0.jpg)](https://youtu.be/0Sxx0rLU_Bw)
 > *Haz clic en la imagen para ver la demostración en YouTube.*
+
+## Sistema de Persistencia: Guardado y Carga Dinámica
+Para garantizar una experiencia de juego continua y profesional, se ha implementado un **Persistence Manager** basado en la serialización de datos a formato **JSON**. Este sistema captura el estado exacto de la partida en los puntos de control (Checkpoints) y lo restaura automáticamente al reiniciar o cargar el nivel.
+
+### Características Clave de la Persistencia
+* **Sincronización del Estado del Jugador:** Guarda la posición exacta en el mundo, la salud actual, el nivel de acceso de seguridad y el progreso de la misión.
+    * *Ajuste Técnico:* El sistema gestiona el estado del `CharacterController` durante la carga para evitar conflictos físicos y asegurar un reposicionamiento (spawn) preciso.
+* **Inventario Escalable:** Utiliza una lista de identificadores únicos (`inventoryItems`) vinculada a un catálogo maestro de **ScriptableObjects**. Esto permite que el inventario sea independiente de la cantidad de objetos, reconstruyendo los iconos de la interfaz (UI) dinámicamente al cargar.
+* **Limpieza del Estado del Mundo:** El sistema registra qué objetos recolectables (`activeItemsNames`) y qué enemigos (`activeEnemiesNames`) permanecen en la escena. Al cargar, cualquier ítem ya recogido o enemigo eliminado es removido automáticamente del mapa.
+* **Arquitectura Desacoplada:** El `PersistenceManager` se comunica con el `LevelManager` para inyectar datos y luego dispara eventos globales, asegurando que la UI y los sistemas del jugador se actualicen sin dependencias directas.
+
+### Ejemplo de Estructura de Datos (`save.json`)
+El archivo de guardado captura la jerarquía completa del estado del juego:
+
+```json
+{
+    "playerData": {
+        "position": {
+            "x": -38.068965911865237,
+            "y": -0.010000109672546387,
+            "z": -1.0585355758666993
+        },
+        "currentHealth": 100,
+        "securityLevel": 3,
+        "filesCollected": 3,
+        "hasPhone": true,
+        "inventoryItems": [
+            "Celphone"
+        ]
+    },
+    "worldData": {
+        "activeItemsNames": [],
+        "activeEnemiesNames": [
+            "Drone (1)",
+            "Drone"
+        ]
+    }
+}
+```
+
+### Demo: Sistema de Persistencia y Guardado
+Puedes ver el funcionamiento de los puntos de control, la limpieza del mundo (enemigos/objetos) y la restauración del inventario en el siguiente video:
+
+Video de Demostración de Persistencia:
+
+[![Mira el video aquí](https://img.youtube.com/vi/pTFZIRE1VlI/0.jpg)](https://youtu.be/pTFZIRE1VlI)
+> *Haz clic en la imagen para ver la demostración en YouTube.*
