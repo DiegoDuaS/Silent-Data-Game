@@ -102,3 +102,32 @@ Video de Demostración de Persistencia:
 
 [![Mira el video aquí](https://img.youtube.com/vi/pTFZIRE1VlI/0.jpg)](https://youtu.be/pTFZIRE1VlI)
 > *Haz clic en la imagen para ver la demostración en YouTube.*
+
+## Gestión de Escenas y Arquitectura de Transición
+Para lograr una experiencia fluida y cinematográfica, se implementó un sistema de gestión de escenas avanzado que separa la lógica de los managers de la representación visual de los niveles.
+
+1. Sistema de Bootstrap Dinámico (BootstrapLoader)
+Utilizando el atributo [RuntimeInitializeOnLoadMethod], el juego garantiza que los sistemas críticos (Audio, Persistencia y Game Manager) se carguen de forma aditiva antes que cualquier otra escena.
+
+- Independencia de Escenas: Permite probar cualquier nivel directamente desde el editor de Unity sin romper las referencias a los Singletons globales.
+
+2. Game Manager y Carga Asíncrona (GameManager)
+El GameManager actúa como el director de orquesta para las transiciones entre niveles, utilizando AsyncOperation para optimizar el rendimiento.
+
+- Carga en Background: Los niveles se cargan en segundo plano mientras el jugador interactúa con la pantalla de carga.
+- Activación Controlada: Se utiliza la propiedad allowSceneActivation = false para sincronizar el final de la carga con la interacción del usuario (Press Space), evitando cortes abruptos.
+
+3. Pantalla de Carga Narrativa e Interactiva (LoadingScene)
+La pantalla de carga es una escena independiente desacoplada del resto del juego.
+
+- Terminal de Hackeo Dinámica: El texto de la terminal cambia según el progreso de la historia (Infiltración, Búsqueda de Archivos o Escape), inyectando narrativa incluso en los tiempos de espera.
+- Feedback Visual: Implementa un efecto de escritura (typing effect) y un cursor parpadeante que reacciona al sistema de entrada del New Input System.
+-  Optimización de Recursos: La escena de carga se descarga automáticamente (UnloadSceneAsync) una vez que el nivel objetivo está activo, liberando memoria RAM de inmediato.
+
+### Demo: Sistema de Carga y Transiciones
+Puedes ver el funcionamiento de la terminal de hackeo dinámica y la transición fluida entre el Menú Principal y los niveles en el siguiente video:
+
+Video de Escena de Carga y Scene Management:
+
+[![Mira el video aquí](https://img.youtube.com/vi/jESOqFWX028/0.jpg)](https://youtu.be/jESOqFWX028)
+> *Haz clic en la imagen para ver la demostración en YouTube.*
