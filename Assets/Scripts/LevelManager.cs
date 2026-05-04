@@ -16,18 +16,12 @@ public class LevelManager : MonoBehaviour
     public int currentHealth = 70;
 
     [Header("References & Audio")]
-    [SerializeField] private GameObject exitDoor;
     [SerializeField] private AudioClip ambienceMusic;
     [SerializeField] private AudioClip victorySFX;
 
     [Header("Inventory")]
     [SerializeField] private List<string> playerInventory = new List<string>();
-
-    private void Awake()
-    {
-        if (Instance == null) Instance = this;
-        else Destroy(gameObject);
-    }
+    
 
     private void Start()
     {
@@ -105,6 +99,6 @@ public class LevelManager : MonoBehaviour
     {
         AudioManager.Instance.StopAmbience();
         if (victorySFX != null) AudioManager.Instance.PlaySFX(victorySFX);
-        if (exitDoor != null) exitDoor.SetActive(false);
+        GameManager.Instance.ChangeScene("Level3", 2);
     }
 }
