@@ -166,6 +166,6 @@ Se estructuraron mapas de acciones dinámicos que garantizan el funcionamiento s
  
 Puedes ver el funcionamiento del New Input System aquí:
  
-[![Mira el video aquí](https://img.youtube.com/vi/jESOqFWX028/0.jpg)](https://youtu.be/jESOqFWX028)
+[![Mira el video aquí](https://img.youtube.com/vi/8U_iWKXjhYg/0.jpg)](https://youtu.be/8U_iWKXjhYg)
  
 > *Haz clic en la imagen para ver la demostración en YouTube.*
