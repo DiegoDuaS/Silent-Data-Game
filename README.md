@@ -131,3 +131,41 @@ Video de Escena de Carga y Scene Management:
 
 [![Mira el video aquí](https://img.youtube.com/vi/jESOqFWX028/0.jpg)](https://youtu.be/jESOqFWX028)
 > *Haz clic en la imagen para ver la demostración en YouTube.*
+
+# New Input System
+ 
+Para cumplir con los estándares modernos de desarrollo y optimización multiplataforma, se ha migrado el juego por completo al **nuevo Input System Package de Unity**, eliminando de forma estricta cualquier dependencia del sistema Legacy (`UnityEngine.Input`) o lecturas directas de hardware (`Keyboard.current`, `Mouse.current`).
+ 
+---
+ 
+## 1. Asset de Configuración Propio (SilentDataInputs)
+ 
+Se diseñó desde cero un **Input Actions Asset personalizado** que centraliza todos los mapas de acción del jugador, descartando los esquemas por defecto. El proyecto está configurado en los Player Settings para procesar únicamente este nuevo sistema de entrada.
+ 
+**Procesadores Crudos (Processors):** Para corregir la disparidad de sensibilidad entre hardware, se implementaron procesadores **Scale Vector 2** independientes para ajustar las deltas del Mouse y el rango normalizado del Gamepad. Asimismo, se utilizó un procesador **Invert Vector 2** (eje Y) en el stick derecho para estandarizar la rotación vertical de la cámara.
+ 
+---
+ 
+## 2. Acciones e Interacciones Multiplataforma
+ 
+Se estructuraron mapas de acciones dinámicos que garantizan el funcionamiento simultáneo en **Teclado/Mouse** y **Gamepad / Control**:
+ 
+| Acción | Mecánica en el Juego | Entrada Teclado/Mouse | Entrada Gamepad (Control) |
+|---|---|---|---|
+| **Move** | Locomoción bidimensional | Teclas WASD / Flechas | Stick Izquierdo |
+| **Look** | Control de la Cámara Orbit | Delta del Mouse | Stick Derecho |
+| **Jump** | Salto vertical y bypass de carga | Barra Espaciadora | Botón Sur |
+| **Interact** | Activación de triggers de salida | Tecla E | Botón Oeste |
+| **Crouch** | Estado de sigilo y reducción física | Tecla Shift | Botón Este |
+| **Shoot** | Disparo de arma por Raycast | Clic Izquierdo | Gatillo Derecho (R2 / RT) |
+| **Hack** | Activación de gadgets de infiltración | Clic Derecho | Gatillo Izquierdo (L1 / LT) |
+ 
+---
+ 
+## Demo: New Input System
+ 
+Puedes ver el funcionamiento del New Input System aquí:
+ 
+[![Mira el video aquí](https://img.youtube.com/vi/jESOqFWX028/0.jpg)](https://youtu.be/jESOqFWX028)
+ 
+> *Haz clic en la imagen para ver la demostración en YouTube.*
