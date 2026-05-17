@@ -210,6 +210,8 @@ MonoBehaviour:
   terminalText: {fileID: 1395032239}
   pressSpaceText: {fileID: 2116574237}
   typingSpeed: 0.05
+  blinkInterval: 0.5
+  jumpAction: {fileID: -2099379676528639254, guid: 052faaac586de48259a63d0c4782560b, type: 3}
 --- !u!114 &271772128
 MonoBehaviour:
   m_ObjectHideFlags: 0

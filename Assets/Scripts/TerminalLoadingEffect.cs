@@ -15,9 +15,24 @@ public class TerminalLoadingEffect : MonoBehaviour
     [SerializeField] private float typingSpeed = 0.05f;
     [SerializeField] private float blinkInterval = 0.5f;
 
+    [Header("Input Configuration")]
+    [SerializeField] private InputActionReference jumpAction;
+
     public static void ResetState()
     {
         IsReadyToTransition = false;
+    }
+
+    private void OnEnable()
+    {
+        if (jumpAction != null)
+            jumpAction.action.Enable();
+    }
+
+    private void OnDisable()
+    {
+        if (jumpAction != null)
+            jumpAction.action.Disable();
     }
 
     private void Start()
@@ -37,7 +52,7 @@ public class TerminalLoadingEffect : MonoBehaviour
 
         if (messagesToDisplay == null || messagesToDisplay.Length == 0)
         {
-            messagesToDisplay = new string[] { "> LOADING...", "> SYSTEM READY." }; 
+            messagesToDisplay = new string[] { "> LOADING...", "> SYSTEM READY." };
         }
 
         foreach (string line in messagesToDisplay)
@@ -57,7 +72,7 @@ public class TerminalLoadingEffect : MonoBehaviour
             StartCoroutine(BlinkRoutine());
         }
 
-        while (Keyboard.current == null || !Keyboard.current.spaceKey.wasPressedThisFrame)
+        while (jumpAction == null || !jumpAction.action.triggered)
         {
             yield return null;
         }
@@ -65,17 +80,14 @@ public class TerminalLoadingEffect : MonoBehaviour
         IsReadyToTransition = true;
     }
 
-    // Corrutina para el efecto de parpadeo (tintileo)
     private IEnumerator BlinkRoutine()
     {
         while (!IsReadyToTransition)
         {
-            // Alternamos la opacidad o simplemente activamos/desactivamos
             pressSpaceText.enabled = !pressSpaceText.enabled;
             yield return new WaitForSeconds(blinkInterval);
         }
 
-        // Al terminar, nos aseguramos de que el texto sea visible
         pressSpaceText.enabled = true;
     }
 }

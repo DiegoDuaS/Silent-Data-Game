@@ -90,16 +90,36 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5542111180780342647, guid: 212907312655a4443a025a304442c17c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.20000076
+      value: 101.33715
       objectReference: {fileID: 0}
     - target: {fileID: 5542111180780342647, guid: 212907312655a4443a025a304442c17c, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.44500005
+      value: 2.4650002
       objectReference: {fileID: 0}
     - target: {fileID: 5542111180780342647, guid: 212907312655a4443a025a304442c17c, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -3.999999
+      value: 30.278706
       objectReference: {fileID: 0}
+    - target: {fileID: 5542111180780342647, guid: 212907312655a4443a025a304442c17c, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5542111180780342647, guid: 212907312655a4443a025a304442c17c, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5542111180780342647, guid: 212907312655a4443a025a304442c17c, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5542111180780342647, guid: 212907312655a4443a025a304442c17c, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6341998657737914585, guid: 212907312655a4443a025a304442c17c, type: 3}
+      propertyPath: m_Actions
+      value: 
+      objectReference: {fileID: -944628639613478452, guid: 5ec75f870a8da88458e81179460c899c, type: 3}
     - target: {fileID: 6341998657737914590, guid: 212907312655a4443a025a304442c17c, type: 3}
       propertyPath: _customAnimator
       value: 
@@ -142,6 +162,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   puedeHackear: 0
+  hackAction: {fileID: -3229604998658178718, guid: 5ec75f870a8da88458e81179460c899c, type: 3}
 --- !u!114 &3821204121741768728
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -159,6 +180,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   hasGun: 1
+  shootAction: {fileID: 1246582809061659117, guid: 5ec75f870a8da88458e81179460c899c, type: 3}
 --- !u!4 &8765252913078553887 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4807976689976324955, guid: 212907312655a4443a025a304442c17c, type: 3}

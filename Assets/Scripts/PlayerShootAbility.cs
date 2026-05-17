@@ -8,7 +8,22 @@ public class PlayerShootAbility : MonoBehaviour
     [SerializeField] private LayerMask enemyLayer;
     [SerializeField] private bool hasGun = true;
 
+    [Header("Input Configuration")]
+    [SerializeField] private InputActionReference shootAction;
+
     private Camera mainCamera;
+
+    private void OnEnable()
+    {
+        if (shootAction != null)
+            shootAction.action.Enable();
+    }
+
+    private void OnDisable()
+    {
+        if (shootAction != null)
+            shootAction.action.Disable();
+    }
 
     void Start()
     {
@@ -17,7 +32,7 @@ public class PlayerShootAbility : MonoBehaviour
 
     void Update()
     {
-        if (hasGun && Mouse.current.leftButton.wasPressedThisFrame)
+        if (hasGun && shootAction != null && shootAction.action.triggered)
         {
             Shoot();
         }
@@ -26,16 +41,20 @@ public class PlayerShootAbility : MonoBehaviour
     private void Shoot()
     {
         Ray ray = mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+        if (Gamepad.current != null && GameManager.Instance != null)
+        {
+            Gamepad.current.SetMotorSpeeds(0.2f, 0.5f);
+        }
+        
         RaycastHit hit;
 
         if (Physics.Raycast(ray.origin, ray.direction, out hit, shootRange, enemyLayer))
         {
-                EventManager.TriggerEnemyHit(hit.collider.gameObject);   
+            EventManager.TriggerEnemyHit(hit.collider.gameObject);
         }
-        
     }
 
-    // --- GIZMOS ---
+
     private void OnDrawGizmos()
     {
         if (mainCamera == null) mainCamera = Camera.main;
@@ -44,7 +63,6 @@ public class PlayerShootAbility : MonoBehaviour
         Vector3 centerPoint = new Vector3(0.5f, 0.5f, 0);
         Ray ray = mainCamera.ViewportPointToRay(centerPoint);
         RaycastHit hit;
-
 
         if (Physics.Raycast(ray, out hit, shootRange, enemyLayer))
         {
@@ -58,7 +76,7 @@ public class PlayerShootAbility : MonoBehaviour
             Gizmos.DrawRay(ray.origin, ray.direction * shootRange);
         }
 
-        Gizmos.color = new Color(1, 0, 0, 0.2f); 
+        Gizmos.color = new Color(1, 0, 0, 0.2f);
         Gizmos.DrawWireSphere(transform.position, shootRange);
     }
 

@@ -5,14 +5,22 @@ public class PlayerHackAbility : MonoBehaviour
 {
     [SerializeField] private bool puedeHackear = false;
 
+    [Header("Input Configuration")]
+    [SerializeField] private InputActionReference hackAction;
+
     private void OnEnable()
     {
         EventManager.OnPhoneCollected += ActivarHackeo;
+        if (hackAction != null)
+            hackAction.action.Enable();
     }
 
     private void OnDisable()
     {
         EventManager.OnPhoneCollected -= ActivarHackeo;
+
+        if (hackAction != null)
+            hackAction.action.Disable();
     }
 
     private void ActivarHackeo()
@@ -22,7 +30,7 @@ public class PlayerHackAbility : MonoBehaviour
 
     void Update()
     {
-        if (puedeHackear && Keyboard.current.hKey.wasPressedThisFrame)
+        if (puedeHackear && hackAction != null && hackAction.action.triggered)
         {
             IntentarHackear();
         }

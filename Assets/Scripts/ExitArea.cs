@@ -5,6 +5,21 @@ public class ExitArea : MonoBehaviour
 {
     private bool isPlayerInArea = false;
 
+    [Header("Input Configuration")]
+    [SerializeField] private InputActionReference interactAction;
+
+    private void OnEnable()
+    {
+        if (interactAction != null)
+            interactAction.action.Enable();
+    }
+
+    private void OnDisable()
+    {
+        if (interactAction != null)
+            interactAction.action.Disable();
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
@@ -25,8 +40,7 @@ public class ExitArea : MonoBehaviour
 
     private void Update()
     {
-        // Si el jugador está en el área y presiona la tecla E
-        if (isPlayerInArea && Keyboard.current.eKey.wasPressedThisFrame)
+        if (isPlayerInArea && interactAction != null && interactAction.action.triggered)
         {
             HandleLevelWin();
         }
@@ -35,7 +49,6 @@ public class ExitArea : MonoBehaviour
     private void HandleLevelWin()
     {
         Debug.Log("[ExitArea] Nivel completado. Transicionando al Nivel 2...");
-
         GameManager.Instance.ChangeScene("Level2", 1);
     }
 }
