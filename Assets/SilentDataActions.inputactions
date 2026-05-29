@@ -219,7 +219,7 @@
                     "id": "17fe9ebe-63d2-432c-be3e-7fb030f02562",
                     "path": "<Pointer>/delta",
                     "interactions": "",
-                    "processors": "",
+                    "processors": "InvertVector2(invertX=false)",
                     "groups": ";Keyboard&Mouse;Touch",
                     "action": "Look",
                     "isComposite": false,

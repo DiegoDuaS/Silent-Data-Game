@@ -14,7 +14,7 @@ public class DroneScoutBehaviour : MonoBehaviour
 
     [Header("Detection (Spherical)")]
     [SerializeField] Transform player;
-    [SerializeField] float detectionRadius = 10f;
+    [SerializeField] float detectionRadius = 5f;
     [SerializeField] LayerMask obstructionMask;
     [SerializeField] float timeToAlert = 1.5f;
 
@@ -124,7 +124,7 @@ public class DroneScoutBehaviour : MonoBehaviour
         agent.SetDestination(player.position);
 
         float dist = Vector3.Distance(transform.position, player.position);
-        if (dist > detectionRadius + 5f)
+        if (dist > detectionRadius + 1f)
         {
             currentState = DroneState.Patrolling;
             detectionTimer = 0;

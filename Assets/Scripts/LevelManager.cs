@@ -21,7 +21,19 @@ public class LevelManager : MonoBehaviour
 
     [Header("Inventory")]
     [SerializeField] private List<string> playerInventory = new List<string>();
-    
+
+    private void Awake()
+    {
+  
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
     private void Start()
     {
@@ -36,18 +48,19 @@ public class LevelManager : MonoBehaviour
         if (pickup is ClassifiedDocs)
         {
             collectedFiles++;
-            EventManager.TriggerFileCollected(collectedFiles);
+            EventLevel1Manager.TriggerFileCollected(collectedFiles);
             if (collectedFiles >= targetFiles) MissionAccomplished();
         }
         else if (pickup is Keycard)
         {
             currentSecurityLevel++;
-            EventManager.TriggerSecurityLevelChanged(currentSecurityLevel);
+            EventLevel1Manager.TriggerSecurityLevelChanged(currentSecurityLevel);
         }
-        else if (pickup is Phone)
+        else if (pickup is Phone || pickup is Gun)
         {
             AddToInventory(pickup.Data.itemName);
         }
+
     }
 
     public void AddToInventory(string itemName)
@@ -62,7 +75,7 @@ public class LevelManager : MonoBehaviour
             if (itemName == "Celphone")
             {
                 hasPhone = true;
-                EventManager.TriggerPhoneCollected();
+                EventLevel1Manager.TriggerPhoneCollected();
             }
         }
         
@@ -92,7 +105,7 @@ public class LevelManager : MonoBehaviour
     public void ModifyHealth(int amount)
     {
         currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
-        EventManager.TriggerHealthChanged(currentHealth);
+        EventLevel1Manager.TriggerHealthChanged(currentHealth);
     }
 
     private void MissionAccomplished()

@@ -6,7 +6,9 @@ public class PlayerShootAbility : MonoBehaviour
     [Header("Shooting Settings")]
     [SerializeField] private float shootRange = 50f;
     [SerializeField] private LayerMask enemyLayer;
-    [SerializeField] private bool hasGun = true;
+
+    // 1. Lo ponemos en 'false' para que el jugador empiece desarmado
+    [SerializeField] private bool hasGun = false;
 
     [Header("Input Configuration")]
     [SerializeField] private InputActionReference shootAction;
@@ -17,12 +19,14 @@ public class PlayerShootAbility : MonoBehaviour
     {
         if (shootAction != null)
             shootAction.action.Enable();
+        EventLevel1Manager.OnGunCollected += EquipGun;
     }
 
     private void OnDisable()
     {
         if (shootAction != null)
             shootAction.action.Disable();
+        EventLevel1Manager.OnGunCollected -= EquipGun;
     }
 
     void Start()
@@ -40,17 +44,22 @@ public class PlayerShootAbility : MonoBehaviour
 
     private void Shoot()
     {
+        Debug.Log("<color=orange>[Shoot] 1. Gatillo presionado. Disparando...</color>");
+
+        if (mainCamera == null) mainCamera = Camera.main;
+        if (mainCamera == null) return;
+
         Ray ray = mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
-        if (Gamepad.current != null && GameManager.Instance != null)
-        {
-            Gamepad.current.SetMotorSpeeds(0.2f, 0.5f);
-        }
-        
         RaycastHit hit;
 
-        if (Physics.Raycast(ray.origin, ray.direction, out hit, shootRange, enemyLayer))
+        if (Physics.Raycast(ray, out hit, shootRange, enemyLayer))
         {
-            EventManager.TriggerEnemyHit(hit.collider.gameObject);
+            Debug.Log($"<color=green>[Shoot] 2. ¡Le diste a un enemigo! Objeto: {hit.collider.gameObject.name}</color>");
+            EventLevel1Manager.TriggerEnemyHit(hit.collider.gameObject);
+        }
+        else
+        {
+            Debug.Log("<color=gray>[Shoot] 2. Fallaste. La bala no tocó nada en la EnemyLayer.</color>");
         }
     }
 
@@ -83,5 +92,6 @@ public class PlayerShootAbility : MonoBehaviour
     public void EquipGun()
     {
         hasGun = true;
+        Debug.Log("<color=cyan>[Player] ¡Pistola equipada mediante evento!</color>");
     }
 }

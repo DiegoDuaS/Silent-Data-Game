@@ -27,9 +27,11 @@ public class GuardBehaviour : MonoBehaviour
 
     [Header("Melee Settings")]
     [SerializeField] float attackDistance = 1.5f;
-    [SerializeField] float attackCooldown = 2.0f;
+    [SerializeField] float attackCooldown = 4.0f;
+    [SerializeField] float attackHitDelay = 0.5f; 
     [SerializeField] float chaseSpeed = 4.5f;
     [SerializeField] float suspiciousSpeed = 1.5f;
+    [SerializeField] int attackDamage = 15;
     private float patrolSpeed;
     private float lastAttackTime = 0f;
 
@@ -53,12 +55,12 @@ public class GuardBehaviour : MonoBehaviour
 
     private void OnEnable()
     {
-        EventManager.OnEnemyHit += HandleHit;
+        EventLevel1Manager.OnEnemyHit += HandleHit;
     }
 
     private void OnDisable()
     {
-        EventManager.OnEnemyHit -= HandleHit;
+        EventLevel1Manager.OnEnemyHit -= HandleHit;
     }
 
     void Update()
@@ -168,6 +170,28 @@ public class GuardBehaviour : MonoBehaviour
     {
         lastAttackTime = Time.time;
         anim.SetTrigger("Attack");
+        StartCoroutine(DamageWithDelay());
+    }
+
+    System.Collections.IEnumerator DamageWithDelay()
+    {
+        yield return new WaitForSeconds(attackHitDelay);
+
+        if (currentState != GuardState.Found) yield break;
+
+        float distanceToPlayer = Vector3.Distance(transform.position, player.position);
+        if (distanceToPlayer <= attackDistance + 0.5f)
+        {
+            if (LevelManager.Instance != null)
+            {
+                LevelManager.Instance.ModifyHealth(-attackDamage);
+                Debug.Log($"<color=red>[Guardia] ¡Golpe asestado! {attackDamage} de daño.</color>");
+            }
+        }
+        else
+        {
+            Debug.Log("<color=yellow>[Guardia] Falló. El jugador esquivó el golpe alejándose a tiempo.</color>");
+        }
     }
 
     void StopFoundState()
@@ -270,11 +294,21 @@ public class GuardBehaviour : MonoBehaviour
 
     void HandleUIBillboard()
     {
-        GameObject activeUI = exclamationMarkUI.activeSelf ? exclamationMarkUI : (questionMarkUI.activeSelf ? questionMarkUI : null);
+        bool showExclamation = exclamationMarkUI != null && exclamationMarkUI.activeSelf;
+        bool showQuestion = questionMarkUI != null && questionMarkUI.activeSelf;
+
+        GameObject activeUI = showExclamation ? exclamationMarkUI : (showQuestion ? questionMarkUI : null);
+
         if (activeUI != null)
         {
-            Vector3 dir = Camera.main.transform.position - activeUI.transform.position;
-            activeUI.transform.rotation = Quaternion.LookRotation(-dir);
+            if (Camera.main != null)
+            {
+                Vector3 dir = Camera.main.transform.position - activeUI.transform.position;
+                if (dir != Vector3.zero)
+                {
+                    activeUI.transform.rotation = Quaternion.LookRotation(-dir);
+                }
+            }
         }
     }
 

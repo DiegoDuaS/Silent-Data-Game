@@ -26,10 +26,17 @@ public class ArmedGuardBehaviour : MonoBehaviour
     [SerializeField] float timeToDetect = 3.0f;
 
     [Header("Combat & Speed Settings")]
-    [SerializeField] float shootingDistance = 5.0f;
+    [SerializeField] float shootingDistance = 10.0f; 
+    [SerializeField] float shootCooldown = 3.0f;     
+    [SerializeField] float burstInterval = 0.3f;    
+    [SerializeField] int shootDamage = 10;          
+    [SerializeField][Range(0f, 1f)] float hitChance = 0.4f; 
+
     [SerializeField] float chaseSpeed = 6.0f;
     [SerializeField] float suspiciousSpeed = 1.5f;
+
     private float patrolSpeed;
+    private float lastShootTime = 0f;
 
     [Header("UI Elements")]
     [SerializeField] GameObject questionMarkUI;
@@ -51,12 +58,12 @@ public class ArmedGuardBehaviour : MonoBehaviour
 
     private void OnEnable()
     {
-        EventManager.OnEnemyHit += HandleHit;
+        EventLevel1Manager.OnEnemyHit += HandleHit;
     }
 
     private void OnDisable()
     {
-        EventManager.OnEnemyHit -= HandleHit;
+        EventLevel1Manager.OnEnemyHit -= HandleHit;
     }
 
     void Update()
@@ -155,7 +162,43 @@ public class ArmedGuardBehaviour : MonoBehaviour
 
             Vector3 lookDir = (player.position - transform.position).normalized;
             lookDir.y = 0;
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(lookDir), Time.deltaTime * 10f);
+            if (lookDir != Vector3.zero)
+            {
+                transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(lookDir), Time.deltaTime * 10f);
+            }
+
+            if (Time.time >= lastShootTime + shootCooldown)
+            {
+                StartCoroutine(ShootBurstSequence());
+            }
+        }
+    }
+
+    System.Collections.IEnumerator ShootBurstSequence()
+    {
+
+        lastShootTime = Time.time;
+
+        for (int i = 0; i < 3; i++)
+        {
+            if (currentState != GuardState.Found) yield break;
+
+            anim.SetTrigger("Shoot");
+
+            if (Random.value <= hitChance)
+            {
+                if (LevelManager.Instance != null)
+                {
+                    LevelManager.Instance.ModifyHealth(-shootDamage);
+                    Debug.Log($"<color=red>[Guardia Armado] ¡Bala {i + 1} de 3 acertó! -{shootDamage} HP.</color>");
+                }
+            }
+            else
+            {
+                Debug.Log($"<color=yellow>[Guardia Armado] Bala {i + 1} de 3 falló.</color>");
+            }
+
+            yield return new WaitForSeconds(burstInterval);
         }
     }
 
@@ -256,12 +299,21 @@ public class ArmedGuardBehaviour : MonoBehaviour
 
     void HandleUIBillboard()
     {
-        GameObject activeUI = exclamationMarkUI.activeSelf ? exclamationMarkUI : (questionMarkUI.activeSelf ? questionMarkUI : null);
+        bool showExclamation = exclamationMarkUI != null && exclamationMarkUI.activeSelf;
+        bool showQuestion = questionMarkUI != null && questionMarkUI.activeSelf;
+
+        GameObject activeUI = showExclamation ? exclamationMarkUI : (showQuestion ? questionMarkUI : null);
 
         if (activeUI != null)
         {
-            Vector3 dir = Camera.main.transform.position - activeUI.transform.position;
-            activeUI.transform.rotation = Quaternion.LookRotation(-dir);
+            if (Camera.main != null)
+            {
+                Vector3 dir = Camera.main.transform.position - activeUI.transform.position;
+                if (dir != Vector3.zero)
+                {
+                    activeUI.transform.rotation = Quaternion.LookRotation(-dir);
+                }
+            }
         }
     }
 
@@ -298,7 +350,7 @@ public class ArmedGuardBehaviour : MonoBehaviour
 
     private void HandleHit(GameObject hitTarget)
     {
-        if (hitTarget == gameObject)
+        if (hitTarget == gameObject || hitTarget.transform.IsChildOf(this.transform))
         {
             Die();
         }

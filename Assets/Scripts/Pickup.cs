@@ -6,10 +6,54 @@ public abstract class Pickup : MonoBehaviour
     public static event Action<Pickup> OnPickupCollected;
 
     [Header("Data & Audio")]
-    [SerializeField] protected PickupData data; 
+    [SerializeField] protected PickupData data;
     [SerializeField] protected AudioClip pickupSFX;
 
+    [Header("Visibility System")]
+    [SerializeField] protected bool ocultarAlInicio = false;
+
+    private MeshRenderer[] mallasDelObjeto;
+
+    public bool YaFueDescubierto { get; private set; } = false;
     public PickupData Data => data;
+
+    protected virtual void Start()
+    {
+
+        mallasDelObjeto = GetComponentsInChildren<MeshRenderer>();
+
+        if (ocultarAlInicio)
+        {
+            CambiarVisibilidad(false);
+            YaFueDescubierto = false;
+        }
+        else
+        {
+
+            YaFueDescubierto = true;
+        }
+    }
+
+    public void DescubrirObjeto()
+    {
+        if (YaFueDescubierto) return;
+
+        YaFueDescubierto = true;
+        CambiarVisibilidad(true);
+
+        EventLevel1Manager.TriggerObjectDiscovered(gameObject.name);
+    }
+
+    private void CambiarVisibilidad(bool visible)
+    {
+        if (mallasDelObjeto != null)
+        {
+            foreach (var malla in mallasDelObjeto)
+            {
+                if (malla != null) malla.enabled = visible;
+            }
+        }
+    }
 
     public void Collect()
     {
@@ -29,7 +73,7 @@ public abstract class Pickup : MonoBehaviour
 
     protected virtual void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Player"))
+        if (YaFueDescubierto && other.gameObject.CompareTag("Player"))
         {
             Collect();
         }
