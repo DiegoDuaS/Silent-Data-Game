@@ -42,6 +42,11 @@ public class ArmedGuardBehaviour : MonoBehaviour
     [SerializeField] GameObject questionMarkUI;
     [SerializeField] GameObject exclamationMarkUI;
 
+    [Header("Audio")]
+    [SerializeField] private AudioClip suspiciousSFX;
+    [SerializeField] private AudioClip foundSFX;
+    [SerializeField] private AudioClip enemyShootSFX; 
+
     private int wpIndex = 0;
     private bool isWaiting = false;
     private bool isInvestigating = false;
@@ -123,6 +128,8 @@ public class ArmedGuardBehaviour : MonoBehaviour
         anim.SetBool("isFound", true);
         anim.SetBool("isSuspicious", false);
 
+        if (foundSFX != null) AudioManager.Instance.PlaySFX(foundSFX);
+
         if (questionMarkUI) questionMarkUI.SetActive(false);
         if (exclamationMarkUI) exclamationMarkUI.SetActive(true);
 
@@ -184,6 +191,7 @@ public class ArmedGuardBehaviour : MonoBehaviour
             if (currentState != GuardState.Found) yield break;
 
             anim.SetTrigger("Shoot");
+            if (enemyShootSFX != null) AudioManager.Instance.PlaySFX(enemyShootSFX);
 
             if (Random.value <= hitChance)
             {
@@ -243,6 +251,8 @@ public class ArmedGuardBehaviour : MonoBehaviour
         agent.speed = suspiciousSpeed;
         anim.SetBool("isSuspicious", true);
         if (questionMarkUI) questionMarkUI.SetActive(true);
+
+        if (suspiciousSFX != null) AudioManager.Instance.PlaySFX(suspiciousSFX);
         agent.isStopped = true;
         agent.velocity = Vector3.zero;
 
@@ -369,16 +379,11 @@ public class ArmedGuardBehaviour : MonoBehaviour
         if (exclamationMarkUI) exclamationMarkUI.SetActive(false);
         if (questionMarkUI) questionMarkUI.SetActive(false);
 
-        // 1. IMPORTANTE: Cambiamos el tag del padre INMEDIATAMENTE
-        // Esto asegura que si el usuario guarda en esos 3 segundos, el PersistenceManager lo ignore.
         transform.root.gameObject.tag = "Untagged";
 
         this.enabled = false;
         agent.enabled = false;
 
-        Debug.Log(gameObject.name + " and its root have been eliminated.");
-
-        // 2. Destruimos el objeto raíz (el prefab completo) tras el delay
         Destroy(transform.root.gameObject, 3f);
     }
 }

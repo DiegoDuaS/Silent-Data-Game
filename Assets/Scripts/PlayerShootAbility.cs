@@ -7,11 +7,13 @@ public class PlayerShootAbility : MonoBehaviour
     [SerializeField] private float shootRange = 50f;
     [SerializeField] private LayerMask enemyLayer;
 
-    // 1. Lo ponemos en 'false' para que el jugador empiece desarmado
     [SerializeField] private bool hasGun = false;
 
     [Header("Input Configuration")]
     [SerializeField] private InputActionReference shootAction;
+
+    [Header("Audio")]
+    [SerializeField] private AudioClip shootSFX;
 
     private Camera mainCamera;
 
@@ -44,7 +46,10 @@ public class PlayerShootAbility : MonoBehaviour
 
     private void Shoot()
     {
-        Debug.Log("<color=orange>[Shoot] 1. Gatillo presionado. Disparando...</color>");
+        if (shootSFX != null)
+        {
+            AudioManager.Instance.PlaySFX(shootSFX);
+        }
 
         if (mainCamera == null) mainCamera = Camera.main;
         if (mainCamera == null) return;
@@ -54,15 +59,9 @@ public class PlayerShootAbility : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit, shootRange, enemyLayer))
         {
-            Debug.Log($"<color=green>[Shoot] 2. ¡Le diste a un enemigo! Objeto: {hit.collider.gameObject.name}</color>");
             EventLevel1Manager.TriggerEnemyHit(hit.collider.gameObject);
         }
-        else
-        {
-            Debug.Log("<color=gray>[Shoot] 2. Fallaste. La bala no tocó nada en la EnemyLayer.</color>");
-        }
     }
-
 
     private void OnDrawGizmos()
     {

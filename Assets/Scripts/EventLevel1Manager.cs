@@ -13,8 +13,13 @@ public class EventLevel1Manager : MonoBehaviour
     public static event Action<GameObject> OnEnemyHit;
     public static event Action<string> OnItemRestored;
     public static event Action<string> OnObjectDiscovered;
+    public static event Action OnGameOver;
+    public static event Action OnVictory;
+    public static event Action<bool> OnGamePaused;
 
-
+    public static void TriggerGameOver() => OnGameOver?.Invoke();
+    public static void TriggerVictory() => OnVictory?.Invoke();
+    public static void TriggerGamePaused(bool isPaused) => OnGamePaused?.Invoke(isPaused);
     public static void TriggerHealthChanged(int currentHealth) => OnHealthChanged?.Invoke(currentHealth);
     public static void TriggerFileCollected(int currentTotal) => OnFileCollected?.Invoke(currentTotal);
     public static void TriggerSecurityLevelChanged(int newLevel) => OnSecurityLevelChanged?.Invoke(newLevel);

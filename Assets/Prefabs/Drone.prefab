@@ -150,6 +150,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   timeToAlert: 2
+  alarmSFX: {fileID: 8300000, guid: a8ac464777eaa0a4c8eb7314999170e5, type: 3}
   scoutLight: {fileID: 3955857822424134053}
   patrolColor: {r: 1, g: 1, b: 1, a: 1}
   alertColor: {r: 1, g: 0, b: 0, a: 1}

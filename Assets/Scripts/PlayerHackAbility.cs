@@ -66,11 +66,8 @@ public class PlayerHackAbility : MonoBehaviour
         Ray ray = mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
         RaycastHit hit;
 
-        Debug.Log("<color=orange>[Hack] 1. Botón presionado. Lanzando Raycast...</color>");
-
         if (Physics.Raycast(ray, out hit, hackRange, capasHackeables))
         {
-            Debug.Log($"<color=yellow>[Hack] 2. Impacto: </color><b>{hit.collider.gameObject.name}</b> | <color=yellow>Tag inicial: </color><b>{hit.collider.tag}</b>");
 
             Transform currentTransform = hit.collider.transform;
             bool esCamara = false;
@@ -89,28 +86,17 @@ public class PlayerHackAbility : MonoBehaviour
 
             if (esCamara)
             {
-                // --- FIX 1: Agregar 'true' para buscar también en objetos apagados ---
                 Camera hackedCam = objetoConTag.GetComponentInChildren<Camera>(true);
 
                 if (hackedCam != null)
                 {
-                    Debug.Log("<color=green>[Hack] 3. ¡Cámara hackeada con éxito!</color>");
                     EnterHackedView(hackedCam);
                 }
-                else
-                {
-                    Debug.LogWarning("[Hack] ERROR: El objeto tiene el Tag 'Camera', pero no se encontró el componente Camera de Unity.");
-                }
+     
             }
-            else
-            {
-                Debug.Log($"[Hack] 3. Objeto inválido. Se chocó contra '{hit.collider.gameObject.name}'.");
-            }
+            
         }
-        else
-        {
-            Debug.Log("<color=gray>[Hack] Raycast en el vacío absoluto.</color>");
-        }
+        
     }
 
     private void EnterHackedView(Camera hackedCam)
@@ -123,6 +109,8 @@ public class PlayerHackAbility : MonoBehaviour
         if (playerController != null)
             playerController.enabled = false;
 
+        if (UIManager.Instance != null) UIManager.Instance.ToggleHackingUI(true);
+
         HackedCameraControl controlCamara = hackedCam.GetComponent<HackedCameraControl>();
         if (controlCamara != null)
         {
@@ -130,7 +118,6 @@ public class PlayerHackAbility : MonoBehaviour
         }
 
         isHackingView = true;
-        Debug.Log("<color=cyan>[Sistema] Conexión remota establecida.</color>");
     }
 
     private void ExitHackedView()
@@ -154,7 +141,7 @@ public class PlayerHackAbility : MonoBehaviour
             playerController.enabled = true;
 
         isHackingView = false;
-        Debug.Log("<color=yellow>[Sistema] Desconectado de la red de cámaras.</color>");
+        if (UIManager.Instance != null) UIManager.Instance.ToggleHackingUI(false);
     }
 
 

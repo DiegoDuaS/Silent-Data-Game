@@ -209,10 +209,17 @@ MonoBehaviour:
   searchTimeAtLocation: 5
   timeToDetect: 3
   shootingDistance: 8
+  shootCooldown: 3
+  burstInterval: 0.3
+  shootDamage: 10
+  hitChance: 0.4
   chaseSpeed: 6
   suspiciousSpeed: 1.5
   questionMarkUI: {fileID: 3513098807619590130}
   exclamationMarkUI: {fileID: 3491229592526768497}
+  suspiciousSFX: {fileID: 8300000, guid: 2ef01c1fa1a33d74486f53359a7fcff3, type: 3}
+  foundSFX: {fileID: 8300000, guid: 954413a5b34104c41a0fd16f3283e495, type: 3}
+  enemyShootSFX: {fileID: 8300000, guid: 7d5f50a5026798f4594d4d33823d9753, type: 3}
 --- !u!1 &3491229592526768497
 GameObject:
   m_ObjectHideFlags: 0

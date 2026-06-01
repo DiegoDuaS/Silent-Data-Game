@@ -50,15 +50,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3203261902030644824, guid: 212907312655a4443a025a304442c17c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.19999695
+      value: 0.20000076
       objectReference: {fileID: 0}
     - target: {fileID: 3203261902030644824, guid: 212907312655a4443a025a304442c17c, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.44500017
+      value: 0.44500005
       objectReference: {fileID: 0}
     - target: {fileID: 3203261902030644824, guid: 212907312655a4443a025a304442c17c, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -4
+      value: -3.999999
       objectReference: {fileID: 0}
     - target: {fileID: 3203261902030644825, guid: 212907312655a4443a025a304442c17c, type: 3}
       propertyPath: Priority.Enabled
@@ -163,7 +163,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   puedeHackear: 1
   hackRange: 30
-  obstacleLayer:
+  capasHackeables:
     serializedVersion: 2
     m_Bits: 0
   hackAction: {fileID: -3229604998658178718, guid: 5ec75f870a8da88458e81179460c899c, type: 3}
@@ -185,6 +185,7 @@ MonoBehaviour:
     m_Bits: 128
   hasGun: 1
   shootAction: {fileID: 1246582809061659117, guid: 5ec75f870a8da88458e81179460c899c, type: 3}
+  shootSFX: {fileID: 8300000, guid: 7d5f50a5026798f4594d4d33823d9753, type: 3}
 --- !u!4 &8765252913078553887 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4807976689976324955, guid: 212907312655a4443a025a304442c17c, type: 3}

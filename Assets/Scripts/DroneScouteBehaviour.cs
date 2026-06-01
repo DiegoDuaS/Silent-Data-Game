@@ -9,14 +9,17 @@ public class DroneScoutBehaviour : MonoBehaviour
     [Header("General Settings")]
     [SerializeField] DroneState currentState = DroneState.Patrolling;
     [SerializeField] List<Transform> waypoints;
-    [SerializeField] float flyHeight = 3.5f;
     [SerializeField] float waitTimeAtWaypoint = 3.0f;
+
+    [SerializeField] float patrolSpeed = 3.5f;
+    [SerializeField] float trackingSpeed = 1.5f;
 
     [Header("Detection (Spherical)")]
     [SerializeField] Transform player;
     [SerializeField] float detectionRadius = 5f;
     [SerializeField] LayerMask obstructionMask;
     [SerializeField] float timeToAlert = 1.5f;
+    [SerializeField] private AudioClip alarmSFX;
 
     [Header("Drone Visuals")]
     [SerializeField] Light scoutLight;
@@ -37,6 +40,8 @@ public class DroneScoutBehaviour : MonoBehaviour
         }
 
         if (scoutLight) scoutLight.color = patrolColor;
+        agent.speed = patrolSpeed;
+
         SetDestinationToWaypoint();
     }
 
@@ -106,6 +111,8 @@ public class DroneScoutBehaviour : MonoBehaviour
     void SetDestinationToWaypoint()
     {
         if (waypoints.Count == 0) return;
+        agent.speed = patrolSpeed;
+
         agent.isStopped = false;
         agent.SetDestination(waypoints[wpIndex].position);
     }
@@ -115,6 +122,9 @@ public class DroneScoutBehaviour : MonoBehaviour
         StopAllCoroutines();
         isWaiting = false;
         currentState = DroneState.Tracking;
+        agent.speed = trackingSpeed;
+
+        if (alarmSFX != null) AudioManager.Instance.PlaySFX(alarmSFX);
         AlertNearbyGuards();
     }
 
@@ -124,11 +134,12 @@ public class DroneScoutBehaviour : MonoBehaviour
         agent.SetDestination(player.position);
 
         float dist = Vector3.Distance(transform.position, player.position);
+
         if (dist > detectionRadius + 1f)
         {
             currentState = DroneState.Patrolling;
             detectionTimer = 0;
-            SetDestinationToWaypoint();
+            SetDestinationToWaypoint(); 
         }
     }
 

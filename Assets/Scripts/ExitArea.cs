@@ -48,7 +48,10 @@ public class ExitArea : MonoBehaviour
 
     private void HandleLevelWin()
     {
-        Debug.Log("[ExitArea] Nivel completado. Transicionando al Nivel 2...");
-        GameManager.Instance.ChangeScene("Level2", 1);
+        if (LevelManager.Instance != null && LevelManager.Instance.GetSecurityLevel() > 0)
+        {
+            LevelManager.Instance.MissionAccomplished();
+        }
+        
     }
 }

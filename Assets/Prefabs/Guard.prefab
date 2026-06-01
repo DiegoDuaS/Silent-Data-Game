@@ -651,10 +651,14 @@ MonoBehaviour:
   timeToDetect: 2.5
   attackDistance: 1.5
   attackCooldown: 2
+  attackHitDelay: 0.5
   chaseSpeed: 4.5
   suspiciousSpeed: 1.5
+  attackDamage: 15
   questionMarkUI: {fileID: 7854525308668433133}
   exclamationMarkUI: {fileID: 3615401186591994208}
+  suspiciousSFX: {fileID: 8300000, guid: 2ef01c1fa1a33d74486f53359a7fcff3, type: 3}
+  foundSFX: {fileID: 8300000, guid: 954413a5b34104c41a0fd16f3283e495, type: 3}
 --- !u!1001 &7797197173550896310
 PrefabInstance:
   m_ObjectHideFlags: 0
