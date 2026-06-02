@@ -16,21 +16,28 @@ public class HackedCameraControl : MonoBehaviour
     [SerializeField] private LayerMask capaObjetosOcultos;
 
     private bool estaSiendoControlada = false;
-    private float rotacionX = 0f;
-    private float rotacionY = 0f;
 
-    private void Start()
+    private float inputX = 0f;
+    private float inputY = 0f;
+    private Vector3 rotacionInicial;
+
+    private void Awake()
     {
-        rotacionX = transform.localEulerAngles.x;
-        rotacionY = transform.localEulerAngles.y;
+        rotacionInicial = transform.localEulerAngles;
     }
 
     public void ActivarControlManual(bool activar)
     {
         estaSiendoControlada = activar;
 
-        if (activar && lookAction != null)
-            lookAction.action.Enable();
+        if (activar)
+        {
+            inputX = 0f;
+            inputY = 0f;
+
+            if (lookAction != null)
+                lookAction.action.Enable();
+        }
     }
 
     private void Update()
@@ -45,19 +52,15 @@ public class HackedCameraControl : MonoBehaviour
     {
         if (lookAction == null) return;
 
-        // Leemos el delta del mouse o stick de forma cruda
         Vector2 inputMirar = lookAction.action.ReadValue<Vector2>();
 
-        // Calculamos la nueva rotación deseada
-        rotacionY += inputMirar.x * sensibilidadCama;
-        rotacionX += inputMirar.y * sensibilidadCama; 
+        inputY += inputMirar.x * sensibilidadCama;
+        inputX += inputMirar.y * sensibilidadCama;
 
-        // Ponemos límites estrictos (Clamps) para evitar rotaciones irreales
-        rotacionX = Mathf.Clamp(rotacionX, -maxAnguloVertical, maxAnguloVertical);
-        rotacionY = Mathf.Clamp(rotacionY, -maxAnguloHorizontal, maxAnguloHorizontal);
+        inputX = Mathf.Clamp(inputX, -maxAnguloVertical, maxAnguloVertical);
+        inputY = Mathf.Clamp(inputY, -maxAnguloHorizontal, maxAnguloHorizontal);
 
-        // Aplicamos la rotación local con respecto a su base fija
-        transform.localRotation = Quaternion.Euler(rotacionX, rotacionY, 0f);
+        transform.localRotation = Quaternion.Euler(rotacionInicial.x + inputX, rotacionInicial.y + inputY, rotacionInicial.z);
     }
 
     private void EscanearEntorno()
@@ -65,13 +68,11 @@ public class HackedCameraControl : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(transform.position, transform.forward, out hit, rangoEscaneo, capaObjetosOcultos))
         {
-            // Ahora buscamos la clase base Pickup
             Pickup objetoOculto = hit.collider.GetComponentInParent<Pickup>();
-            
+
             if (objetoOculto != null && !objetoOculto.YaFueDescubierto)
             {
                 objetoOculto.DescubrirObjeto();
-                
             }
         }
     }

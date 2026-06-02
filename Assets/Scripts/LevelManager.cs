@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Net;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -15,7 +17,7 @@ public class LevelManager : MonoBehaviour
 
     [Header("Health System")]
     public int maxHealth = 100;
-    public int currentHealth = 70;
+    public int currentHealth = 100;
 
     [Header("References & Audio")]
     [SerializeField] private AudioClip ambienceMusic;

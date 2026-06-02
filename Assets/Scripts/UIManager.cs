@@ -15,6 +15,7 @@ public class UIManager : MonoBehaviour
 
     [Header("HUD Elements")]
     public Slider healthBarSlider;
+    public TextMeshProUGUI filesCounterText;
 
     [Header("Inventory Settings")]
     public Transform inventoryPanel;
@@ -52,6 +53,7 @@ public class UIManager : MonoBehaviour
         if (interactionText != null) interactionText.gameObject.SetActive(false);
 
         UpdateHealthBar(100);
+        if (filesCounterText != null) filesCounterText.text = "Files found: 0";
 
         ToggleHackingUI(false);
         LockCursor(true);
@@ -67,6 +69,7 @@ public class UIManager : MonoBehaviour
         EventLevel1Manager.OnObjectDiscovered += ShowNotification;
         EventLevel1Manager.OnPlayerAtExitRange += HandleExitPrompt;
         EventLevel1Manager.OnSecurityLevelChanged += UpdatePromptIfStandingAtExit;
+        EventLevel1Manager.OnFileCollected += UpdateFilesCounter;
     }
 
     private void OnDisable()
@@ -77,9 +80,17 @@ public class UIManager : MonoBehaviour
         EventLevel1Manager.OnGameOver -= ShowGameOver;
         EventLevel1Manager.OnVictory -= ShowWinScreen;
         EventLevel1Manager.OnObjectDiscovered -= ShowNotification;
-
         EventLevel1Manager.OnPlayerAtExitRange -= HandleExitPrompt;
         EventLevel1Manager.OnSecurityLevelChanged -= UpdatePromptIfStandingAtExit;
+        EventLevel1Manager.OnFileCollected -= UpdateFilesCounter;
+    }
+
+    private void UpdateFilesCounter(int total)
+    {
+        if (filesCounterText != null)
+        {
+            filesCounterText.text = "Files found: " + total.ToString();
+        }
     }
 
     private void HandleExitPrompt(bool inRange)
@@ -157,7 +168,11 @@ public class UIManager : MonoBehaviour
 
     private void UpdateHealthBar(int health) { if (healthBarSlider != null) healthBarSlider.value = health; }
 
-    private void HandlePhysicalPickup(Pickup pickup) { CreateInventoryIcon(pickup.Data); }
+    private void HandlePhysicalPickup(Pickup pickup)
+    {
+        if (pickup is Medkit || pickup is ClassifiedDocs) return;
+        CreateInventoryIcon(pickup.Data);
+    }
 
     private void CreateInventoryIcon(PickupData data)
     {
@@ -195,6 +210,4 @@ public class UIManager : MonoBehaviour
         Cursor.lockState = lockState ? CursorLockMode.Locked : CursorLockMode.None;
         Cursor.visible = !lockState;
     }
-
-   
 }

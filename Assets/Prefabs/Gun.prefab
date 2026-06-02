@@ -69,7 +69,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   data: {fileID: 11400000, guid: 2c8d5135de0aef14ab983ef93fba696a, type: 2}
   pickupSFX: {fileID: 0}
-  mallasDelObjeto: []
   ocultarAlInicio: 1
 --- !u!1001 &1351905284832776049
 PrefabInstance:
